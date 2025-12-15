@@ -16,10 +16,11 @@ const updateSchema = z.object({
 
 export async function GET(
   _request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const blog = await Blog.findById(params.id);
+  const { id } = await context.params;
+  const blog = await Blog.findById(id);
   if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   if (blog.privacy === "private") {
@@ -35,7 +36,7 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
@@ -43,7 +44,8 @@ export async function PATCH(
   }
 
   await dbConnect();
-  const blog = await Blog.findById(params.id);
+  const { id } = await context.params;
+  const blog = await Blog.findById(id);
   if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const isOwner = blog.author.toString() === sessionUser.id;
@@ -65,7 +67,7 @@ export async function PATCH(
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
@@ -73,7 +75,8 @@ export async function DELETE(
   }
 
   await dbConnect();
-  const blog = await Blog.findById(params.id);
+  const { id } = await context.params;
+  const blog = await Blog.findById(id);
   if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const isOwner = blog.author.toString() === sessionUser.id;

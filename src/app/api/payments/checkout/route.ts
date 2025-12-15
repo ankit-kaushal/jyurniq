@@ -7,7 +7,8 @@ import Payment from "@/models/payment";
 import { getSessionUser } from "@/lib/auth-helpers";
 
 const payloadSchema = z.object({
-  bloggerId: z.string(),
+  bloggerId: z.string().optional(),
+  recipientId: z.string().optional(),
   amount: z.number().min(1),
   currency: z.string().default("INR"),
   type: z.enum(["question", "conversation", "message"]),
@@ -29,9 +30,17 @@ export async function POST(request: Request) {
 
   await dbConnect();
 
+  const recipientId = parsed.data.recipientId || parsed.data.bloggerId;
+  if (!recipientId) {
+    return NextResponse.json(
+      { error: "recipientId or bloggerId required" },
+      { status: 400 }
+    );
+  }
+
   const payment = await Payment.create({
     customer: sessionUser.id,
-    blogger: parsed.data.bloggerId,
+    blogger: recipientId,
     amount: parsed.data.amount,
     currency: parsed.data.currency,
     status: "pending",

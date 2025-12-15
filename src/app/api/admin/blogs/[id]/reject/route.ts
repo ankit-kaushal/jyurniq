@@ -16,10 +16,14 @@ export async function PATCH(
   await dbConnect();
   const { id } = await context.params;
   const blog = await Blog.findById(id);
-  if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!blog) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
-  blog.approved = true;
-  await blog.save();
-  return NextResponse.json(blog);
+  // Instead of deleting, we can mark as rejected or delete
+  // For now, we'll delete it, but you could add a "rejected" status
+  await blog.deleteOne();
+  
+  return NextResponse.json({ success: true, message: "Blog rejected and deleted" });
 }
 

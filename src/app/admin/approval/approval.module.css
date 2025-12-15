@@ -1,0 +1,273 @@
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.kicker {
+  color: #f97316;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin: 0 0 8px 0;
+}
+
+.heading {
+  margin: 0 0 8px 0;
+  color: #0f172a;
+  font-size: 32px;
+}
+
+.meta {
+  color: #475569;
+  margin: 0;
+}
+
+.backButton {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #fff;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.backButton:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.empty {
+  text-align: center;
+  padding: 64px 24px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.empty p {
+  margin: 0;
+  color: #64748b;
+  font-size: 18px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0 0 8px 0;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.author {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.authorLink {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authorLink:hover {
+  text-decoration: underline;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.badgePending,
+.badgePublic,
+.badgePrivate {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badgePending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badgePublic {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badgePrivate {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.metaItem {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.images {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.contentPreview {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.contentPreview p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.viewButton,
+.approveButton,
+.rejectButton {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
+.viewButton {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.viewButton:hover {
+  background: #e2e8f0;
+}
+
+.approveButton {
+  background: #10b981;
+  color: #fff;
+  border-color: #10b981;
+}
+
+.approveButton:hover:not(:disabled) {
+  background: #059669;
+  border-color: #059669;
+}
+
+.rejectButton {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+}
+
+.rejectButton:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.approveButton:disabled,
+.rejectButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .viewButton,
+  .approveButton,
+  .rejectButton {
+    width: 100%;
+    text-align: center;
+  }
+}
+

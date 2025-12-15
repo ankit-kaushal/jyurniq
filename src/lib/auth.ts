@@ -4,7 +4,12 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import dbConnect from "@/lib/db";
 import User from "@/models/user";
 
+if (!process.env.NEXTAUTH_SECRET) {
+  console.warn("NEXTAUTH_SECRET is not set. Sessions may not work properly.");
+}
+
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-change-in-production",
   providers: [
     Credentials({
       name: "Credentials",

@@ -15,9 +15,10 @@ async function getBlog(id: string) {
 export default async function BlogDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { blog, comments } = await getBlog(params.id);
+  const { id } = await params;
+  const { blog, comments } = await getBlog(id);
   if (!blog) return <div className={styles.wrap}>Not found</div>;
 
   return (
@@ -36,10 +37,12 @@ export default async function BlogDetail({
 
       <section className={styles.comments}>
         <h3>Comments</h3>
-        {comments.length === 0 && <p className={styles.muted}>No comments yet.</p>}
+        {comments.length === 0 && (
+          <p className={styles.muted}>No comments yet.</p>
+        )}
         <ul>
-          {comments.map((c: any) => (
-            <li key={c._id}>
+          {comments.map((c) => (
+            <li key={String(c._id)}>
               <p className={styles.commentBody}>{c.content}</p>
               <p className={styles.commentMeta}>
                 {new Date(c.createdAt).toLocaleDateString()}
@@ -51,4 +54,3 @@ export default async function BlogDetail({
     </div>
   );
 }
-

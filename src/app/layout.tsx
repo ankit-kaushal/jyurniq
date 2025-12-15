@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Providers from "@/components/Providers";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Jyurniq | Travel Blog Platform",
   description:
-    "Create travel blogs with Next.js + MongoDB. Auth, comments, embeds, and paid 1:1 conversations.",
+    "Your Journey, Uniquely Told. Create travel blogs, connect with travelers, and monetize your expertise.",
 };
 
 export default function RootLayout({
@@ -26,9 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
-          {children}
-        </div>
+        <Providers>
+          <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
+            <Navbar />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

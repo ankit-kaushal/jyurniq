@@ -1,0 +1,220 @@
+.wrap {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.profile {
+  text-align: center;
+  padding: 32px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e2e8f0;
+}
+
+.name {
+  margin: 0;
+  color: #0f172a;
+  font-size: 32px;
+}
+
+.bio {
+  margin: 0;
+  color: #475569;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.editButton {
+  padding: 10px 20px;
+  background: #111827;
+  color: #fff;
+  border: 1px solid #111827;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.editButton:hover {
+  opacity: 0.9;
+}
+
+.settings,
+.contact {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.description {
+  color: #64748b;
+  margin: 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 500;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.input,
+.textarea {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.saveButton {
+  padding: 12px 24px;
+  background: #111827;
+  color: #fff;
+  border: 1px solid #111827;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  align-self: flex-start;
+}
+
+.saveButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.option {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.option:hover {
+  border-color: #6366f1;
+}
+
+.optionTitle {
+  margin: 0;
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.optionPrice {
+  margin: 0;
+  color: #10b981;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.optionDesc {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.optionButton {
+  padding: 12px 24px;
+  background: #111827;
+  color: #fff;
+  border: 1px solid #111827;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+}
+
+.optionButton:hover {
+  opacity: 0.9;
+}
+
+.disabled {
+  text-align: center;
+  padding: 48px;
+  color: #64748b;
+}
+
+.link {
+  color: #6366f1;
+  text-decoration: underline;
+  margin-top: 12px;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .options {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -13,6 +13,10 @@ export interface IUser {
   earnings: number;
   emailVerified: boolean;
   verificationToken?: string;
+  // Contact & monetization
+  contactEnabled: boolean;
+  questionPrice: number; // Price for paid questions (e.g., 20)
+  conversationPrice: number; // Price for 1:1 conversations (e.g., 100)
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,6 +32,9 @@ const UserSchema = new Schema<IUser>(
     earnings: { type: Number, default: 0 },
     emailVerified: { type: Boolean, default: false },
     verificationToken: { type: String },
+    contactEnabled: { type: Boolean, default: false },
+    questionPrice: { type: Number, default: 20 },
+    conversationPrice: { type: Number, default: 100 },
   },
   { timestamps: true }
 );
