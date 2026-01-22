@@ -26,11 +26,29 @@ export async function GET(request: Request) {
   if (travelType) filters.travelType = travelType;
   if (author) filters.author = author;
 
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "12");
+  const skip = (page - 1) * limit;
+
   const blogs = await Blog.find(filters)
     .sort({ createdAt: -1 })
-    .select("title slug location travelType privacy createdAt author images");
+    .select("title slug location travelType privacy createdAt author images")
+    .populate("author", "name email avatar")
+    .skip(skip)
+    .limit(limit)
+    .lean();
 
-  return NextResponse.json(blogs);
+  const total = await Blog.countDocuments(filters);
+
+  return NextResponse.json({
+    blogs,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+    },
+  });
 }
 
 export async function POST(request: Request) {

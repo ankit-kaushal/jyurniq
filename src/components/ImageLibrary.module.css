@@ -1,0 +1,189 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.library {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.actions {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.uploadButton {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #6366f1;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+}
+
+.uploadButton:hover {
+  background: #4f46e5;
+}
+
+.uploadButton:has(input:disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.imageItem {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: grab;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  background: #f8fafc;
+}
+
+.imageItem:hover {
+  border-color: #6366f1;
+  transform: scale(1.02);
+}
+
+.imageItem:active {
+  cursor: grabbing;
+}
+
+.imageItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.imageItem:hover .imageOverlay {
+  opacity: 1;
+}
+
+.deleteButton {
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.1);
+}
+
+.empty {
+  padding: 60px 24px;
+  text-align: center;
+  color: #64748b;
+}
+
+.empty p {
+  margin: 8px 0;
+}
+
+.loading {
+  padding: 60px 24px;
+  text-align: center;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0;
+  }
+
+  .library {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    padding: 16px;
+  }
+}

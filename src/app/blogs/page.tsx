@@ -4,12 +4,17 @@ import styles from "./blogs.module.css";
 async function getBlogs() {
   const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const res = await fetch(`${base}/api/blogs`, { cache: "no-store" });
-  if (!res.ok) return [];
-  return res.json();
+  if (!res.ok) return { blogs: [], pagination: null };
+  const data = await res.json();
+  // Handle both old format (array) and new format (object with blogs property)
+  if (Array.isArray(data)) {
+    return { blogs: data, pagination: null };
+  }
+  return data;
 }
 
 export default async function BlogsPage() {
-  const blogs = await getBlogs();
+  const { blogs } = await getBlogs();
 
   return (
     <div className={styles.wrap}>

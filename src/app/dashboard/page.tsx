@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import RichTextEditor from "@/components/RichTextEditor";
 import styles from "./dashboard.module.css";
 
 interface Blog {
@@ -186,16 +187,13 @@ export default function DashboardPage() {
             />
           </label>
           <label className={styles.label}>
-            Content * (Markdown supported)
-            <textarea
-              className={styles.textarea}
+            Content *
+            <RichTextEditor
               value={formData.content}
-              onChange={(e) =>
-                setFormData({ ...formData, content: e.target.value })
+              onChange={(value) =>
+                setFormData({ ...formData, content: value })
               }
-              required
-              rows={10}
-              placeholder="Write your travel story here..."
+              placeholder="Write your travel story here... Use the toolbar to format text, add headers, and insert images."
             />
           </label>
           <div className={styles.row}>
