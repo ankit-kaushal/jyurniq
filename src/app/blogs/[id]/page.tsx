@@ -1,15 +1,50 @@
 import dbConnect from "@/lib/db";
 import Blog from "@/models/blog";
 import Comment from "@/models/comment";
+import CommentForm from "@/components/CommentForm";
+import CommentItem from "@/components/CommentItem";
 import styles from "./blog.module.css";
 
 async function getBlog(id: string) {
   await dbConnect();
   const blog = await Blog.findById(id).lean();
-  const comments = await Comment.find({ blog: id })
+  const allComments = await Comment.find({ blog: id })
     .sort({ createdAt: -1 })
+    .populate("author", "name email avatar")
     .lean();
-  return { blog, comments };
+  
+  // Serialize comments to plain objects
+  const serializeComment = (c: any) => ({
+    _id: String(c._id),
+    content: c.content,
+    author: c.author ? {
+      name: typeof c.author === 'object' ? c.author.name : undefined,
+      email: typeof c.author === 'object' ? c.author.email : undefined,
+      avatar: typeof c.author === 'object' ? c.author.avatar : undefined,
+    } : null,
+    createdAt: c.createdAt ? new Date(c.createdAt).toISOString() : new Date().toISOString(),
+    parent: c.parent ? String(c.parent) : undefined,
+  });
+  
+  // Separate top-level comments and replies
+  const topLevelComments = allComments
+    .filter((c: any) => !c.parent)
+    .map(serializeComment);
+  const replies = allComments
+    .filter((c: any) => c.parent)
+    .map(serializeComment);
+  
+  // Group replies by parent comment
+  const repliesByParent = replies.reduce((acc: any, reply: any) => {
+    const parentId = reply.parent;
+    if (!acc[parentId]) {
+      acc[parentId] = [];
+    }
+    acc[parentId].push(reply);
+    return acc;
+  }, {});
+  
+  return { blog, topLevelComments, repliesByParent };
 }
 
 export default async function BlogDetail({
@@ -18,8 +53,10 @@ export default async function BlogDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { blog, comments } = await getBlog(id);
+  const { blog, topLevelComments, repliesByParent } = await getBlog(id);
   if (!blog) return <div className={styles.wrap}>Not found</div>;
+  
+  const totalComments = topLevelComments.length + Object.values(repliesByParent).flat().length;
 
   return (
     <div className={styles.wrap}>
@@ -36,20 +73,26 @@ export default async function BlogDetail({
       />
 
       <section className={styles.comments}>
-        <h3>Comments</h3>
-        {comments.length === 0 && (
-          <p className={styles.muted}>No comments yet.</p>
+        <h3>Comments ({totalComments})</h3>
+        <CommentForm blogId={id} />
+        {topLevelComments.length === 0 ? (
+          <p className={styles.muted}>No comments yet. Be the first to comment!</p>
+        ) : (
+          <div className={styles.commentsList}>
+            {topLevelComments.map((comment: any) => {
+              const commentId = String(comment._id);
+              const commentReplies = repliesByParent[commentId] || [];
+              return (
+                <CommentItem
+                  key={commentId}
+                  comment={comment}
+                  blogId={id}
+                  replies={commentReplies}
+                />
+              );
+            })}
+          </div>
         )}
-        <ul>
-          {comments.map((c) => (
-            <li key={String(c._id)}>
-              <p className={styles.commentBody}>{c.content}</p>
-              <p className={styles.commentMeta}>
-                {new Date(c.createdAt).toLocaleDateString()}
-              </p>
-            </li>
-          ))}
-        </ul>
       </section>
     </div>
   );

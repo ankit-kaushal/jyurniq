@@ -12,15 +12,16 @@ const commentSchema = z.object({
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await context.params;
   await dbConnect();
-  const blog = await Blog.findById(params.id);
+  const blog = await Blog.findById(id);
   if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
   if (blog.privacy === "private") {
     return NextResponse.json(

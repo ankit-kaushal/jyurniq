@@ -119,29 +119,29 @@
 
 .comments {
   border-top: 1px solid #e2e8f0;
-  padding-top: 16px;
+  padding-top: 32px;
+  margin-top: 32px;
 }
 
-.comments ul {
+.comments h3 {
+  margin: 0 0 24px 0;
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.commentsList {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 24px 0 0 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.commentBody {
-  margin: 0 0 4px 0;
-}
-
-.commentMeta {
-  color: #94a3b8;
-  font-size: 12px;
-  margin: 0;
+  gap: 0;
 }
 
 .muted {
   color: #94a3b8;
+  text-align: center;
+  padding: 40px 20px;
+  font-style: italic;
 }
 
