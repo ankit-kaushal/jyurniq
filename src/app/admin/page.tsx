@@ -32,27 +32,27 @@ export default async function AdminPage() {
           </p>
           <span className={styles.cardLink}>Go to Approval Page →</span>
         </Link>
-        <div className={styles.card}>
+        <Link href="/admin/blogs" className={styles.card}>
+          <h3 className={styles.cardTitle}>All Blogs</h3>
+          <p className={styles.cardDesc}>
+            View and manage all blogs on the platform with filters.
+          </p>
+          <span className={styles.cardLink}>Manage All Blogs →</span>
+        </Link>
+        <Link href="/admin/users" className={styles.card}>
           <h3 className={styles.cardTitle}>User Management</h3>
           <p className={styles.cardDesc}>
             View and manage user accounts, roles, and permissions.
           </p>
-          <span className={styles.cardLink}>Coming soon</span>
-        </div>
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Reports & Flags</h3>
-          <p className={styles.cardDesc}>
-            Review reported content and handle moderation requests.
-          </p>
-          <span className={styles.cardLink}>Coming soon</span>
-        </div>
-        <div className={styles.card}>
+          <span className={styles.cardLink}>Manage Users →</span>
+        </Link>
+        <Link href="/admin/analytics" className={styles.card}>
           <h3 className={styles.cardTitle}>Analytics</h3>
           <p className={styles.cardDesc}>
             View platform statistics, blog performance, and user activity.
           </p>
-          <span className={styles.cardLink}>Coming soon</span>
-        </div>
+          <span className={styles.cardLink}>View Analytics →</span>
+        </Link>
       </div>
     </div>
   );
