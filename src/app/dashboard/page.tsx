@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RichTextEditor from "@/components/RichTextEditor";
+import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./dashboard.module.css";
 
 interface Blog {
@@ -39,7 +40,7 @@ export default function DashboardPage() {
     content: "",
     location: "",
     travelType: "solo" as const,
-    privacy: "public" as const,
+    privacy: "public" as "public" | "private",
     images: [] as string[],
   });
 
@@ -228,8 +229,34 @@ export default function DashboardPage() {
     return <div className={styles.wrap}>Loading...</div>;
   }
 
+  // Determine breadcrumb based on current view
+  const getBreadcrumbItems = () => {
+    const base = [
+      { label: "Home", href: "/" },
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+        onClick: () => {
+          setShowProfileForm(false);
+          setShowForm(false);
+          setEditingBlog(null);
+        },
+      },
+    ];
+
+    if (showProfileForm) {
+      return [...base, { label: "Edit Profile" }];
+    }
+    if (showForm) {
+      return [...base, { label: editingBlog ? "Edit Blog" : "New Blog" }];
+    }
+
+    return base;
+  };
+
   return (
     <div className={styles.wrap}>
+      <Breadcrumb items={getBreadcrumbItems()} />
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>Creator Dashboard</p>
@@ -258,7 +285,7 @@ export default function DashboardPage() {
                 content: "",
                 location: "",
                 travelType: "solo",
-                privacy: "public",
+                privacy: "public" as "public" | "private",
                 images: [],
               });
             }}

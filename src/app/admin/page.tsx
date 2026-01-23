@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./admin.module.css";
 
 export default async function AdminPage() {
@@ -12,6 +13,7 @@ export default async function AdminPage() {
   }
   return (
     <div className={styles.wrap}>
+      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Admin" }]} />
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>Admin</p>

@@ -12,6 +12,8 @@
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
+  background: #fff;
+  color: #0f172a;
   resize: vertical;
   min-height: 100px;
   transition: border-color 0.2s;

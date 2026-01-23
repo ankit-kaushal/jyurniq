@@ -22,7 +22,6 @@ export default async function Navbar() {
           {session ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
-              <Link href="/contact/me">Contact Settings</Link>
               {session.user?.role === "admin" && (
                 <Link href="/admin">Admin</Link>
               )}
@@ -45,4 +44,3 @@ export default async function Navbar() {
     </nav>
   );
 }
-

@@ -8,6 +8,14 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+  
+  /* Force inputs and textareas to have white backgrounds */
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    background: #fff !important;
+    color: #0f172a !important;
+  }
 }
 
 html,

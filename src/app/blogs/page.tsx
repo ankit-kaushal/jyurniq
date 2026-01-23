@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./blogs.module.css";
 
 async function getBlogs() {
@@ -18,6 +19,7 @@ export default async function BlogsPage() {
 
   return (
     <div className={styles.wrap}>
+      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Blogs" }]} />
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>Discover</p>

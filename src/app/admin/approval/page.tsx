@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./approval.module.css";
 
 interface Blog {
@@ -110,6 +111,13 @@ export default function ApprovalPage() {
 
   return (
     <div className={styles.wrap}>
+      <Breadcrumb
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Admin", href: "/admin" },
+          { label: "Blog Approval" },
+        ]}
+      />
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>Admin Panel</p>

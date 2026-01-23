@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./contact.module.css";
 
 interface UserData {
@@ -134,6 +135,16 @@ export default function ContactPage() {
 
   return (
     <div className={styles.wrap}>
+      <Breadcrumb
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Dashboard", href: "/dashboard" },
+          {
+            label: isOwnPage ? "Contact Settings" : "Contact",
+            href: isOwnPage ? "/contact/me" : undefined,
+          },
+        ]}
+      />
       <div className={styles.profile}>
         {user.avatar && (
           <img src={user.avatar} alt={user.name} className={styles.avatar} />
@@ -194,7 +205,7 @@ export default function ContactPage() {
             />
           </label>
           <label className={styles.label}>
-            Bio
+            Bio (Optional)
             <textarea
               className={styles.textarea}
               value={formData.bio}
@@ -202,7 +213,7 @@ export default function ContactPage() {
                 setFormData({ ...formData, bio: e.target.value })
               }
               rows={4}
-              placeholder="Tell people about yourself..."
+              placeholder="Tell people about yourself... (optional)"
             />
           </label>
           <button

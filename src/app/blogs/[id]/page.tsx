@@ -3,6 +3,7 @@ import Blog from "@/models/blog";
 import Comment from "@/models/comment";
 import CommentForm from "@/components/CommentForm";
 import CommentItem from "@/components/CommentItem";
+import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./blog.module.css";
 
 async function getBlog(id: string) {
@@ -60,6 +61,13 @@ export default async function BlogDetail({
 
   return (
     <div className={styles.wrap}>
+      <Breadcrumb
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Blogs", href: "/blogs" },
+          { label: blog.title },
+        ]}
+      />
       <header className={styles.header}>
         <p className={styles.kicker}>{blog.travelType || "travel"}</p>
         <h1 className={styles.heading}>{blog.title}</h1>
