@@ -24,7 +24,16 @@ export default function DashboardPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showProfileForm, setShowProfileForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    avatar: "",
+    bio: "",
+  });
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -41,6 +50,7 @@ export default function DashboardPage() {
     }
     if (status === "authenticated") {
       fetchBlogs();
+      fetchProfile();
     }
   }, [status, router]);
 
@@ -55,6 +65,90 @@ export default function DashboardPage() {
       console.error("Failed to fetch blogs", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch("/api/users/profile");
+      if (res.ok) {
+        const data = await res.json();
+        setProfile({
+          name: data.name || "",
+          email: data.email || "",
+          avatar: data.avatar || "",
+          bio: data.bio || "",
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch profile", err);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file");
+      return;
+    }
+
+    setUploadingAvatar(true);
+    e.target.value = "";
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64 = reader.result as string;
+        try {
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ file: base64, folder: "avatars" }),
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            setProfile({ ...profile, avatar: data.url });
+          } else {
+            alert("Failed to upload avatar");
+          }
+        } catch (err) {
+          console.error("Upload error", err);
+          alert("Failed to upload avatar");
+        } finally {
+          setUploadingAvatar(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Error", err);
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handleProfileSave = async () => {
+    try {
+      const res = await fetch("/api/users/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile),
+      });
+
+      if (res.ok) {
+        setShowProfileForm(false);
+        alert("Profile updated successfully!");
+        // Refresh session to get updated name/email
+        window.location.reload();
+      } else {
+        const error = await res.json();
+        alert(error.error || "Failed to update profile");
+      }
+    } catch (err) {
+      alert("Something went wrong");
     }
   };
 
@@ -145,6 +239,12 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className={styles.actions}>
+          <button
+            className={styles.button}
+            onClick={() => setShowProfileForm(!showProfileForm)}
+          >
+            {showProfileForm ? "Cancel" : "Edit Profile"}
+          </button>
           <Link href="/contact/me" className={styles.button}>
             Contact Settings
           </Link>
@@ -167,6 +267,93 @@ export default function DashboardPage() {
           </button>
         </div>
       </header>
+
+      {showProfileForm && (
+        <div className={styles.profileSection}>
+          <h2 className={styles.sectionTitle}>Edit Profile</h2>
+          <div className={styles.profileForm}>
+            <div className={styles.avatarSection}>
+              {profile.avatar ? (
+                <img
+                  src={profile.avatar}
+                  alt="Profile"
+                  className={styles.avatarPreview}
+                />
+              ) : (
+                <div className={styles.avatarPlaceholder}>
+                  {profile.name?.charAt(0)?.toUpperCase() || "U"}
+                </div>
+              )}
+              <label className={styles.avatarUploadButton}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  disabled={uploadingAvatar}
+                  style={{ display: "none" }}
+                />
+                {uploadingAvatar ? "Uploading..." : "Change Avatar"}
+              </label>
+            </div>
+            <label className={styles.label}>
+              Name *
+              <input
+                className={styles.input}
+                type="text"
+                value={profile.name}
+                onChange={(e) =>
+                  setProfile({ ...profile, name: e.target.value })
+                }
+                required
+                placeholder="Your name"
+              />
+            </label>
+            <label className={styles.label}>
+              Email
+              <input
+                className={styles.input}
+                type="email"
+                value={profile.email}
+                disabled
+                style={{ background: "#f8fafc", cursor: "not-allowed" }}
+                placeholder="your@email.com"
+              />
+              <span className={styles.hint}>Email cannot be changed</span>
+            </label>
+            <label className={styles.label}>
+              Bio
+              <textarea
+                className={styles.textarea}
+                value={profile.bio}
+                onChange={(e) =>
+                  setProfile({ ...profile, bio: e.target.value })
+                }
+                rows={4}
+                placeholder="Tell people about yourself..."
+              />
+            </label>
+            <div className={styles.formActions}>
+              <button
+                type="button"
+                className={styles.submitButton}
+                onClick={handleProfileSave}
+              >
+                Save Profile
+              </button>
+              <button
+                type="button"
+                className={styles.cancelButton}
+                onClick={() => {
+                  setShowProfileForm(false);
+                  fetchProfile();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showForm && (
         <form className={styles.form} onSubmit={handleSubmit}>
