@@ -3,16 +3,30 @@ import dbConnect from "@/lib/db";
 import Blog from "@/models/blog";
 import User from "@/models/user";
 import { getSessionUser } from "@/lib/auth-helpers";
-import { isAdmin } from "@/lib/utils";
+import { canModerateBlogs } from "@/lib/utils";
 
 export async function GET() {
   const sessionUser = await getSessionUser();
-  if (!sessionUser || !isAdmin(sessionUser.role)) {
+  if (!sessionUser || !canModerateBlogs(sessionUser.role)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   await dbConnect();
-  const blogs = await Blog.find({ approved: false })
+  // Only blogs awaiting review: status "pending", or legacy docs (no status, not approved, no rejection note).
+  const blogs = await Blog.find({
+    $or: [
+      { status: "pending" },
+      {
+        status: { $exists: false },
+        approved: false,
+        $or: [
+          { rejectionNote: { $exists: false } },
+          { rejectionNote: null },
+          { rejectionNote: "" },
+        ],
+      },
+    ],
+  })
     .sort({ createdAt: -1 })
     .populate("author", "name email")
     .lean();

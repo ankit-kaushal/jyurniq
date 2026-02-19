@@ -12,7 +12,7 @@ export async function GET() {
   await dbConnect();
   const blogs = await Blog.find({ author: user.id })
     .sort({ createdAt: -1 })
-    .select("title slug location travelType privacy approved createdAt");
+    .select("title slug location travelType privacy approved status createdAt rejectionNote rejectedAt");
 
   return NextResponse.json(blogs);
 }

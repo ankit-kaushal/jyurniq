@@ -4,14 +4,14 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      role: "user" | "admin";
+      role: "admin" | "editor" | "viewer" | "user";
       emailVerified?: boolean;
     } & DefaultSession["user"];
   }
 
   interface User {
     id: string;
-    role: "user" | "admin";
+    role: "admin" | "editor" | "viewer" | "user";
     emailVerified?: boolean;
   }
 }

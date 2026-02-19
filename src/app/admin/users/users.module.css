@@ -92,6 +92,8 @@
 }
 
 .badgeAdmin,
+.badgeEditor,
+.badgeViewer,
 .badgeUser {
   padding: 4px 10px;
   border-radius: 6px;
@@ -105,9 +107,19 @@
   color: #92400e;
 }
 
-.badgeUser {
+.badgeEditor {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badgeViewer {
   background: #e0e7ff;
   color: #3730a3;
+}
+
+.badgeUser {
+  background: #f3f4f6;
+  color: #4b5563;
 }
 
 .verified {

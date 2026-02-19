@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       name: parsed.name,
       email: parsed.email,
       password: hashed,
-      role: "user",
+      role: "viewer",
       emailVerified: false,
       verificationToken,
     });

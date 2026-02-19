@@ -69,11 +69,13 @@ export async function POST(request: Request) {
     slugBase ||
     Math.random().toString(36).substring(2, 8); // ensure non-empty slug
 
+  const isAutoApproved = user.role === "admin" || user.role === "editor";
   const blog = await Blog.create({
     ...parsed.data,
     slug,
     author: user.id,
-    approved: user.role === "admin",
+    approved: isAutoApproved,
+    status: isAutoApproved ? "approved" : "pending",
   });
 
   return NextResponse.json(blog, { status: 201 });

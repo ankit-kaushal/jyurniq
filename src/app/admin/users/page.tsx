@@ -7,11 +7,13 @@ import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 import styles from "./users.module.css";
 
+type UserRole = "admin" | "editor" | "viewer" | "user";
+
 interface User {
   _id: string;
   name: string;
   email: string;
-  role: "user" | "admin";
+  role: UserRole;
   emailVerified: boolean;
   earnings: number;
   createdAt: string;
@@ -23,7 +25,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [newRole, setNewRole] = useState<"user" | "admin">("user");
+  const [newRole, setNewRole] = useState<UserRole>("viewer");
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -55,7 +57,7 @@ export default function UsersPage() {
     }
   };
 
-  const handleRoleChange = async (userId: string, newRole: "user" | "admin") => {
+  const handleRoleChange = async (userId: string, newRole: UserRole) => {
     if (!confirm(`Change user role to ${newRole}?`)) return;
 
     try {
@@ -156,6 +158,10 @@ export default function UsersPage() {
                       className={
                         user.role === "admin"
                           ? styles.badgeAdmin
+                          : user.role === "editor"
+                          ? styles.badgeEditor
+                          : user.role === "viewer"
+                          ? styles.badgeViewer
                           : styles.badgeUser
                       }
                     >
@@ -185,11 +191,13 @@ export default function UsersPage() {
                             className={styles.roleSelect}
                             value={newRole}
                             onChange={(e) =>
-                              setNewRole(e.target.value as "user" | "admin")
+                              setNewRole(e.target.value as UserRole)
                             }
                           >
-                            <option value="user">User</option>
+                            <option value="viewer">Viewer</option>
+                            <option value="editor">Editor</option>
                             <option value="admin">Admin</option>
+                            <option value="user">User (legacy)</option>
                           </select>
                           <button
                             className={styles.saveButton}

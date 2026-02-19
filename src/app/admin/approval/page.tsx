@@ -31,6 +31,11 @@ export default function ApprovalPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState<string | null>(null);
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [rejectNote, setRejectNote] = useState("");
+
+  const canModerate =
+    session?.user?.role === "admin" || session?.user?.role === "editor";
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -38,13 +43,13 @@ export default function ApprovalPage() {
       return;
     }
     if (status === "authenticated") {
-      if (session?.user?.role !== "admin") {
+      if (!canModerate) {
         router.push("/dashboard");
         return;
       }
       fetchPendingBlogs();
     }
-  }, [status, session, router]);
+  }, [status, session, router, canModerate]);
 
   const fetchPendingBlogs = async () => {
     try {
@@ -81,18 +86,34 @@ export default function ApprovalPage() {
     }
   };
 
-  const handleReject = async (id: string) => {
-    if (!confirm("Reject and delete this blog? This action cannot be undone."))
+  const openReject = (id: string) => {
+    setRejectingId(id);
+    setRejectNote("");
+  };
+
+  const closeReject = () => {
+    setRejectingId(null);
+    setRejectNote("");
+  };
+
+  const handleReject = async () => {
+    if (!rejectingId || !rejectNote.trim()) {
+      alert("Please provide a rejection note.");
       return;
-    setProcessing(id);
+    }
+    setProcessing(rejectingId);
     try {
-      const res = await fetch(`/api/admin/blogs/${id}/reject`, {
+      const res = await fetch(`/api/admin/blogs/${rejectingId}/reject`, {
         method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note: rejectNote.trim() }),
       });
       if (res.ok) {
-        setBlogs(blogs.filter((b) => b._id !== id));
+        setBlogs(blogs.filter((b) => b._id !== rejectingId));
+        closeReject();
       } else {
-        alert("Failed to reject blog");
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to reject blog");
       }
     } catch (err) {
       alert("Something went wrong");
@@ -213,7 +234,7 @@ export default function ApprovalPage() {
                 </button>
                 <button
                   className={styles.rejectButton}
-                  onClick={() => handleReject(blog._id)}
+                  onClick={() => openReject(blog._id)}
                   disabled={processing === blog._id}
                 >
                   {processing === blog._id ? "Processing..." : "✗ Reject"}
@@ -221,6 +242,46 @@ export default function ApprovalPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {rejectingId && (
+        <div className={styles.modalOverlay} onClick={closeReject}>
+          <div
+            className={styles.modal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className={styles.modalTitle}>Reject blog</h3>
+            <p className={styles.modalDesc}>
+              Provide a note for the author (required). The blog will remain
+              saved but marked as rejected.
+            </p>
+            <textarea
+              className={styles.rejectTextarea}
+              value={rejectNote}
+              onChange={(e) => setRejectNote(e.target.value)}
+              placeholder="e.g. Content does not meet guidelines..."
+              rows={4}
+              maxLength={2000}
+            />
+            <div className={styles.modalActions}>
+              <button
+                type="button"
+                className={styles.cancelButton}
+                onClick={closeReject}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className={styles.rejectButton}
+                onClick={handleReject}
+                disabled={!rejectNote.trim() || processing === rejectingId}
+              >
+                {processing === rejectingId ? "Rejecting..." : "Reject"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

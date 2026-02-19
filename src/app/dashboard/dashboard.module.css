@@ -198,6 +198,8 @@
 }
 
 .badgePending,
+.badgeApproved,
+.badgeRejected,
 .badgePublic,
 .badgePrivate {
   padding: 4px 8px;
@@ -212,6 +214,16 @@
   color: #92400e;
 }
 
+.badgeApproved {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badgeRejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 .badgePublic {
   background: #d1fae5;
   color: #065f46;
@@ -220,6 +232,20 @@
 .badgePrivate {
   background: #e0e7ff;
   color: #3730a3;
+}
+
+.rejectionNote {
+  padding: 10px 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #991b1b;
+  margin: 8px 0 0 0;
+}
+
+.rejectionNote strong {
+  margin-right: 6px;
 }
 
 .cardMeta {

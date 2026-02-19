@@ -6,7 +6,7 @@ import { isAdmin } from "@/lib/utils";
 import { z } from "zod";
 
 const updateUserSchema = z.object({
-  role: z.enum(["user", "admin"]).optional(),
+  role: z.enum(["admin", "editor", "viewer", "user"]).optional(),
 });
 
 export async function GET(

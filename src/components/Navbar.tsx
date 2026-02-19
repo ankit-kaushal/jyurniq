@@ -22,7 +22,7 @@ export default async function Navbar() {
           {session ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
-              {session.user?.role === "admin" && (
+              {(session.user?.role === "admin" || session.user?.role === "editor") && (
                 <Link href="/admin">Admin</Link>
               )}
               <form action="/api/auth/signout" method="POST">

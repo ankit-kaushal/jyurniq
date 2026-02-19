@@ -16,6 +16,9 @@ interface Blog {
   travelType?: string;
   privacy: string;
   approved: boolean;
+  status?: "pending" | "approved" | "rejected";
+  rejectionNote?: string;
+  rejectedAt?: string;
   createdAt: string;
 }
 
@@ -485,8 +488,14 @@ export default function DashboardPage() {
               <div className={styles.cardHeader}>
                 <h3 className={styles.cardTitle}>{blog.title}</h3>
                 <div className={styles.badges}>
-                  {!blog.approved && (
+                  {blog.approved && (
+                    <span className={styles.badgeApproved}>Approved</span>
+                  )}
+                  {(blog.status === "pending" || (!blog.status && !blog.approved && !blog.rejectionNote?.trim())) && (
                     <span className={styles.badgePending}>Pending</span>
+                  )}
+                  {(blog.status === "rejected" || blog.rejectionNote?.trim()) && (
+                    <span className={styles.badgeRejected}>Rejected</span>
                   )}
                   <span
                     className={
@@ -503,6 +512,11 @@ export default function DashboardPage() {
                 {blog.location || "No location"} • {blog.travelType || "travel"} •{" "}
                 {new Date(blog.createdAt).toLocaleDateString()}
               </p>
+              {(blog.status === "rejected" || blog.rejectionNote?.trim()) && blog.rejectionNote?.trim() && (
+                <div className={styles.rejectionNote}>
+                  <strong>Rejection note:</strong> {blog.rejectionNote}
+                </div>
+              )}
               <div className={styles.cardActions}>
                 <Link
                   href={`/blogs/${blog._id}`}
